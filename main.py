@@ -1,7 +1,9 @@
 from produto import Estoque
+from banco import criar_tabela
 
 
 def main():
+    criar_tabela()
     estoque = Estoque()
 
     while True:

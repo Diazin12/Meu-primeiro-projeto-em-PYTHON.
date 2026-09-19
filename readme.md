@@ -9,7 +9,7 @@ organização do código em módulos.
 ## Funcionalidades
 
 - Cadastrar produtos com nome, preço e quantidade inicial.
-- Listar os produtos cadastrados (com ajuste pendente descrito abaixo).
+- Listar os produtos cadastrados.
 - Buscar um produto pelo ID.
 - Adicionar quantidade ao estoque.
 - Retirar quantidade, verificando o saldo disponível.
@@ -23,7 +23,12 @@ organização do código em módulos.
 - Verificação de preço e quantidade inicial para impedir valores negativos.
 - Exigência de quantidades maiores que zero nas entradas e retiradas de estoque.
 - Verificação de produto inexistente nas operações por ID.
-- Captura de erros do SQLite nas funções de consulta e alteração do banco.
+- Captura de erros do SQLite (`sqlite3.Error`) em todas as funções de consulta
+  e alteração do banco, cada uma retornando `True`/`False` (ou o dado
+  encontrado) para indicar sucesso ou falha.
+- Confirmação do retorno das funções do banco antes de exibir mensagens de
+  sucesso ao usuário — nenhuma operação anuncia sucesso sem ter, de fato,
+  persistido a alteração.
 
 ## Tecnologias
 
@@ -31,6 +36,8 @@ organização do código em módulos.
 - SQLite, utilizando o módulo `sqlite3` da biblioteca padrão.
 - Programação Orientada a Objetos, com as classes `Produto` e `Estoque`.
 - Consultas SQL parametrizadas.
+- Conexões com o banco abertas por operação, usando gerenciador de contexto
+  (`with`) e fechamento explícito da conexão em bloco `finally`.
 
 Não é necessário instalar bibliotecas externas ou configurar um servidor de banco de dados.
 
@@ -47,6 +54,15 @@ estoque.db   # Banco de dados local, criado automaticamente se não existir
 A classe `Produto` representa os dados de um item. O método de classe
 `from_tupla()` converte um registro retornado pelo SQLite em um objeto `Produto`.
 A classe `Estoque` reúne as operações disponíveis no terminal.
+
+A função `perguntar_continuar(mensagem)`, em `produto.py`, centraliza a
+pergunta padrão de "1-SIM / 2-NÃO" usada em várias operações (cadastrar mais
+um item, remover mais um, excluir mais um, editar mais um, confirmar uma
+alteração), evitando repetir a mesma lógica de validação em cada método.
+
+Cada função de `banco.py` abre sua própria conexão com o banco (em vez de uma
+conexão global compartilhada), garantindo que ela seja corretamente fechada
+mesmo em caso de erro.
 
 ## Dados armazenados
 
@@ -92,14 +108,6 @@ Escolha uma opção no menu e siga as instruções do terminal:
 
 Use o ID para identificar o produto nas consultas e alterações. Para preços com
 casas decimais, use ponto, por exemplo: `12.50`.
-
-## Ajustes pendentes
-
-- Corrigir a listagem para converter cada tupla em `Produto`, em vez de passar
-  a lista inteira para `from_tupla()`.
-- Ajustar a opção de editar outro item para solicitar um novo ID.
-- Verificar os retornos das funções do banco antes de exibir mensagens de sucesso:
-  atualmente, as operações podem anunciar sucesso mesmo após um erro de persistência.
 
 ## Objetivo
 
