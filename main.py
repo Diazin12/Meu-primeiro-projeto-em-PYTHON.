@@ -1,13 +1,14 @@
 from produto import Estoque
-from banco import criar_tabela
+from banco import criar_tabela, criar_tabela_historico
 
 
 def main():
     criar_tabela()
     estoque = Estoque()
+    criar_tabela_historico()
 
     while True:
-        print("\n--- MENU DO ESTOQUE ---")
+        print("\n--- MENU DO ESTOQUE ---\n")
         print("1- Cadastrar produto")
         print("2- Listar produtos")
         print("3- Buscar produto")
@@ -21,20 +22,27 @@ def main():
 
         if opcao == "1":
             estoque.cadastro()
+            
         elif opcao == "2":
             estoque.listar_produtos()
+            
         elif opcao == "3":
             mensagem = estoque.buscar_produto()
             if mensagem:
                 print(mensagem)
+                
         elif opcao == "4":
             estoque.adicionar_estoque()
+            
         elif opcao == "5":
             estoque.remover_estoque()
+            
         elif opcao == "6":
             estoque.excluir_item()
+            
         elif opcao == "7":
             estoque.editar_item()
+            
         elif opcao == "0":
             print("Programa encerrado.")
             break

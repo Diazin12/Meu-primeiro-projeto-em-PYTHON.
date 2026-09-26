@@ -1,6 +1,8 @@
 import sqlite3
+from datetime import datetime
 
 def criar_tabela():
+    conexao = None
     try:
         with sqlite3.connect("estoque.db") as conexao:
             cursor = conexao.cursor()
@@ -26,12 +28,13 @@ def cadastrar_produto (nome, valor, quantidade):
         with sqlite3.connect("estoque.db") as conexao:
             cursor = conexao.cursor()
             cursor.execute("INSERT INTO produtos (nome, valor, quantidade) VALUES (?, ?, ?)",
-                        (nome, valor, quantidade))          
-        return True
+                        (nome, valor, quantidade)) 
+            novo_id = cursor.lastrowid # <= Guarda o id.      
+        return novo_id
 
     except sqlite3.Error as erro:
         print(f"Erro ao cadastrar o produto {erro}")
-        return False
+        return None 
     
     finally:
         if conexao is not None:
@@ -121,6 +124,7 @@ def excluir_produto(id_produto):
     conexao = None
     try:
         with sqlite3.connect("estoque.db") as conexao:
+            conexao.execute("PRAGMA foreign_keys = ON") # <= # Ativa as regras de chave estrangeira nesta conexão.
             cursor = conexao.cursor()
             cursor.execute("""
     DELETE FROM produtos
@@ -175,6 +179,50 @@ WHERE id = ?
     except sqlite3.Error as erro:
         print(f"Erro ao editar valor do produto. {erro}")
         return False
+    
+    finally:
+        if conexao is not None:
+            conexao.close()
+
+def criar_tabela_historico():
+    conexao = None
+    try:
+        with sqlite3.connect("estoque.db") as conexao:
+            cursor = conexao.cursor()
+            cursor.execute("""
+CREATE TABLE IF NOT EXISTS historico(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+produto_id INTEGER ,
+tipo TEXT NOT NULL,
+descricao_produto TEXT,
+data_hora TEXT NOT NULL,
+FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE SET NULL
+) """) #FORGEIGN KEY = Deifine Define produto_id como uma chave estrangeira, vinculada ao id da tabela produtos, para garantir que o produto referenciado exista.
+        return True
+    
+    except sqlite3.Error as erro:
+        print(f"Erro ao criar a tabela de histórico. {erro}")
+        return False
+
+    finally:
+        if conexao is not None:
+            conexao.close()
+
+def registrar_historico(produto_id, tipo, descricao_produto):
+    conexao = None
+    try:
+        data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        with sqlite3.connect("estoque.db") as conexao:
+            cursor = conexao.cursor()
+            cursor.execute("""
+INSERT INTO historico (produto_id, tipo, descricao_produto, data_hora) VALUES (?, ?, ?, ?)
+""", (produto_id, tipo, descricao_produto, data_hora))
+        print(f"Registrado em: {data_hora}")
+        return True
+    
+    except sqlite3.Error as erro:
+        print(f"Erro ao registrar histórico. {erro}")
+        return False    
     
     finally:
         if conexao is not None:

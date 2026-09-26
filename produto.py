@@ -1,4 +1,23 @@
-from banco import cadastrar_produto, buscar_todos_produtos, buscar_produto_id, adicionar_quantidade, remover_quantidade, excluir_produto, editar_nome, editar_valor
+from banco import cadastrar_produto, buscar_todos_produtos, buscar_produto_id, adicionar_quantidade, remover_quantidade, excluir_produto, editar_nome, editar_valor, registrar_historico
+
+def perguntar_continuar(mensagem):
+    while True:
+        op = input(f"{mensagem}\n"
+        "1- SIM\n"
+        "2- SAIR\n"
+        "Digite uma opção: "
+        )
+        
+        if op == '1':
+            return True
+        
+        elif op == '2':
+            return False
+        
+        else:
+            print("Digite uma opção valida")
+            continue
+
 
 class Produto:
     def __init__(self, id, nome, valor, quantidade):
@@ -11,11 +30,9 @@ class Produto:
     @classmethod
     def from_tupla(cls, tupla):
         return cls (*tupla)
-        
+
 
 class Estoque:
-    def __init__(self):
-        self.lista_produtos = []
 
     def cadastro(self):
         print("Você escolheu a opção cadastrar produto.")
@@ -37,30 +54,22 @@ class Estoque:
             if quantidade < 0:
                 print("A quantiade não pode ser menor que 0")
                 continue
-            cadastrar_produto(nome, valor, quantidade)
+            produto_id = cadastrar_produto(nome, valor, quantidade)
 
-            print(" Produto cadastrado com sucesso! ")
+            if produto_id:
+                registrar_historico(produto_id, "cadastro", f"Produto {nome} cadastrado com quantidade {quantidade}")
+                print("Item cadastrado com sucesso.")
+
+            else:
+                print(" Não foi possível cadastrar o produto. Tente novamente. ")
 
             while True:
-                try:
-                    op = int(input("Deseja cadastrar mais um item? \n"
-                    "1- SIM \n"
-                    "2- NÂO \n"
-                    "Digite uma opção: "
-                    ))
-
-                except ValueError:
-                    print("Digite uma opção númerica.")
-                    continue
-
-                if op == 1:
-                    break
-
-                elif op == 2:
-                    return "Encerando o progama."
-
-                else:
-                    print("Digite uma opção valida.")
+                    if perguntar_continuar("Deseja cadastrar mais um item?"):
+                        break
+                    
+                    else:
+                        print("Encerrando o progama.")
+                        return "Encerrando o progama."
 
     def listar_produtos(self):
         print("Você escolheu a opção listar produto.")
@@ -70,14 +79,14 @@ class Estoque:
             print("O estoque está vazio.")
             return
         
-        for numero,produto in enumerate(produtos, start = 1):
-            produtos = Produto.from_tupla(produtos)
+        for numero, produto in enumerate(produtos, start=1):
+            produto = Produto.from_tupla(produto)
             print(f"Produto {numero}:\n"
-                  f"ID: {produtos.id}\n"
-                  f"NOME: {produtos.nome}\n"
-                  f"PREÇO: R${produtos.valor:.2f}\n"
-                  f"QUANTIDADE: {produtos.quantidade}"
-                    )        
+                  f"ID: {produto.id}\n"
+                  f"NOME: {produto.nome}\n"
+                  f"PREÇO: R${produto.valor:.2f}\n"
+                  f"QUANTIDADE: {produto.quantidade}"
+                    )
             print("------------------------")
 
     def buscar_produto(self):
@@ -138,26 +147,27 @@ class Estoque:
                 print("Digite uma quantidade maior que zero.")
                 continue
                 
-            adicionar_quantidade(id_produto, acrescimo)
+            sucesso = adicionar_quantidade(id_produto, acrescimo)
             quantidade_atual = produtos.quantidade + acrescimo
-            print(f"Item guardado no estoque com sucesso. Quantidade atual: {quantidade_atual}")
+            if sucesso:
+                registrar_historico(
+                id_produto,
+                "entrada",
+                f"Adicionadas {acrescimo} unidades ao produto {produtos.nome}. "
+                f"Quantidade atual: {quantidade_atual}"
+)
+                print(f"Item guardado no estoque com sucesso. Quantidade atual: {quantidade_atual}")
 
+            else:   
+                print(" Não foi possível adicionar o produto ao estoque. Tente novamente. ")
 
             while True:
-                op = input(
-                "Deseja adicionar quantidade a outro item?\n"
-                "1- SIM\n"
-                "2- SAIR\n"
-                "Digite uma opção: "
-                )
-
-                if op == "1":
+                if perguntar_continuar("Deseja adicionar mais um item ao estoque?"):
                     break
-                elif op == "2":
-                    print("Adição encerrada.")
-                    return
+                
                 else:
-                    print("Digite uma opção válida.")
+                    print("Encerrando o progama.")
+                    return
 
     def remover_estoque(self):
         print("Você escolheu a opção remover produto do estoque.")
@@ -192,24 +202,28 @@ class Estoque:
                 print("Quantidade insuficiente no estoque.")
                 continue
 
-            remover_quantidade(id_produto, diminuir)
+            sucesso = remover_quantidade(id_produto, diminuir)
             valor_final = produtos.quantidade - diminuir
-            print(f"Item retirado do estoque com sucesso. Quantidade atual: {valor_final}")
-                
+
+            if sucesso:
+                registrar_historico(
+                id_produto,
+                "saida",
+                f"Removido {diminuir} unidades ao produto {produtos.nome}. "
+                f"Quantidade atual: {valor_final}"
+)
+                print(f"Item retirado do estoque com sucesso. Quantidade atual: {valor_final}")
+
+            else:
+                print(" Não foi possível remover o produto. Tente novamente. ")
 
             while True:
-                op = input("Deseja remover mais um item? \n"
-                           "1- SIM \n"
-                           "2- NÃO \n"
-                           "Digite uma opção: ")
-
-                if op == "1":
+                if perguntar_continuar("Deseja remover mais um item do estoque?"):
                     break
-                elif op == "2":
-                    print("Retirada encerrada.")
-                    return
+                
                 else:
-                    print("Digite uma opção válida.")
+                    print("Encerrando o progama.")
+                    return
 
     def excluir_item(self):
         print("Você escolheu a opção excluir produto do estoque.")
@@ -231,51 +245,37 @@ class Estoque:
 
             print(f"\n--- PRODUTO {produtos.nome} ENCONTRADO ---")
             while True:
-                try:
-                    op_excluir = int(input("Deseja remover esse item?\n"
-                              "1-SIM\n"
-                              "2-NÃO\n"
-                              "Digite uma das opção aqui: "
-                                        ))
-                except ValueError:
-                    print("Digite uma opção valida.")
-                    continue
+                quer_excluir = perguntar_continuar("Deseja realmente excluir esse item?")
+                
+                if quer_excluir:
+                    sucesso = excluir_produto(id_produto)
 
-                if op_excluir == 1:
-                    excluir_produto(id_produto)
-                    print("Produto removido com sucesso.")
-                    break
-
-                elif op_excluir == 2:
-                    print("Voltando ao menu.")
-                    return
-                else:
-                    print("Digite uma opção valida.")
-
-            while True:
-                    try:
-                        op = int(input("Deseja remover mais um item? \n"
-                        "1- SIM \n"
-                        "2- NÂO \n"
-                        "Digite uma opção: "
-                                    ))
-
-                    except ValueError:
-                        print("Digite uma opção númerica.")
-                        continue
-
-                    if op == 1:
+                    if sucesso:
+                        registrar_historico(
+                        None, # <= Usa None porque o produto já foi excluído; o ID original fica na descrição.
+                        "exclusao",
+                        f"Item {produtos.nome} retirado do estoque (ID original: {id_produto}) excluído.) "
+)
+                        print("Produto removido com sucesso.")
                         break
 
-                    elif op == 2:
-                        print("Exclusão encerrada.")
-                        return
-
                     else:
-                        print("Digite uma opção valida.")
+                        print(" Não foi possível excluir o produto. Tente novamente. ")
+
+                else:
+                    print("Voltando ao menu.")
+                    return
+
+            while True:
+                if perguntar_continuar("Deseja excluir mais um item?"):
+                    break
+                
+                else:
+                    print("Encerrando o progama.")
+                    return
 
     def editar_item(self):
-        print("Você escolheu a opção excluir produto do estoque.")
+        print("Você escolheu a opção editar produto do estoque.")
 
         while True:
             try:
@@ -308,42 +308,32 @@ class Estoque:
 
                 if op == 1:
                     while True:
-                        try:
-                            op_nome = int(input("Deseja realmente alterar o nome?\n"
-                              "1-SIM\n"
-                              "2-NÃO\n"
-                              "Digite uma das opção aqui: "
-                                        ))
-                        except ValueError:
-                            print("Digite uma opcão valida.")
-                            continue
-
-                        if op_nome == 1:
+                        quer_alterar = perguntar_continuar("Confirme se você realmente deseja alterar o nome.")
+                        if quer_alterar:
                             novo_nome = input("Digite o novo nome: ")
-                            editar_nome(id_produto, novo_nome)
-                            print("Nome alterado com sucesso.")
-                            break
+                            sucesso = editar_nome(id_produto, novo_nome)
 
-                        elif op_nome == 2:
-                            print("Voltando ao menu.")
-                            return
+                            if sucesso:
+                                registrar_historico(id_produto, "edicao",
+                                                    f"Nome alterado de {produtos.nome} para {novo_nome}"
+                                                    )
+                                print("Nome alterado com sucesso.")
+                                break
+
+                            else:
+                                print(" Não foi possível alterar o nome do produto. Tente novamente. ")
+                        
+                        else: 
+                            print("Alteração cancelada.")
+                            break
 
                 elif op == 2:
                     while True:
-                        try:
-                            op_valor = int(input("Deseja remover esse item?\n"
-                              "1-SIM\n"
-                              "2-NÃO\n"
-                              "Digite uma das opção aqui: "
-                                        ))
-                        except ValueError:
-                            print("Digite uma opcão valida.")
-                            continue
-
-                        if op_valor == 1:
+                        quer_alterar = perguntar_continuar("Confirme se você realmente deseja alterar o valor.")
+                        
+                        if quer_alterar:
                             try:
                                 novo_valor = float(input("Digite o novo valor em R$: "))
-
                             except ValueError:
                                 print("Digite um valor numérico.")
                                 continue
@@ -353,30 +343,28 @@ class Estoque:
                                 continue
 
                             
-                            editar_valor(id_produto,novo_valor)
-                            print("Valor atualizado com sucesso.")
-                            break
+                            sucesso2 = editar_valor(id_produto,novo_valor)
 
-                        elif op_valor == 2:
-                            print("Alteração cancelada.")
-                            break
+                            if sucesso2:
+                                registrar_historico(id_produto, 
+                                                    "edicao",
+                                                    f"Valor do produto {produtos.nome} alterado"
+                                                    f"de R$ {produtos.valor:2f} para R$ {novo_valor:.2f}"
+                                                    )
+                                print("Valor atualizado com sucesso.")
+                                break
+
+                            else:
+                                print(" Não foi possível alterar valor do produto. Tente novamente. ")
 
                         else:
-                            print("Opção inválida.")      
+                            print("Alteração cancelada.")
+                            break  
 
                 elif op == 3:
                     while True:
-                        try:
-                            op_tudo = int(input("Deseja alterar o nome e o valor?\n"
-                                                "1-SIM\n"
-                                                 "2-NÂO\n"
-                                                 "Digite uma opção aqui: "
-                                                ))
-                        except ValueError:
-                            print("Digite uma opção valida.")
-                            continue
-
-                        if op_tudo == 1:
+                        quer_alterar = perguntar_continuar("Confirme se você realmente deseja alterar o nome e o valor.")
+                        if quer_alterar:
                             novo_nome = input(("Digite o novo nome: "))
                             try:
                                 novo_valor = float(input("Digite o novo valor: R$ "))
@@ -389,31 +377,31 @@ class Estoque:
                                 continue
 
                             
-                            editar_nome(id_produto, novo_nome)
-                            editar_valor(id_produto, novo_valor)
-                            print("Valor e nome atualizado com sucesso.")
-                            break
+                            sucesso_nome = editar_nome(id_produto, novo_nome)
+                            sucesso_valor = editar_valor(id_produto, novo_valor)
+                            sucesso3 = sucesso_nome and sucesso_valor
 
-                        elif op_tudo == 2:
-                            print("Alteração cancelada.")
-                            break   
+                            if sucesso3:
+                                registrar_historico(
+                                id_produto,
+                                "edicao",
+                                f"Nome alterado de {produtos.nome} para {novo_nome}. "
+                                f"Valor alterado de R$ {produtos.valor:.2f} para R$ {novo_valor:.2f}"
+                            )
+                                print("Valor e nome atualizado com sucesso.")
+                                break
+
+                            else:
+                                print(" Não foi possível alterar os dados do produto. Tente novamente. ")
 
                         else:
-                            print("Opção inválida.")
-                            continue    
+                            print("Alteração cancelada.")
+                            break  
 
                 while True:
-                    op = input(
-                        "Deseja editar outro item?\n"
-                        "1- SIM\n"
-                        "2- SAIR\n"
-                        "Digite uma opção: "
-                    )
-
-                    if op == "1":
+                    if perguntar_continuar("Deseja editar outro item?"):
                         break
-                    elif op == "2":
+                    
+                    else:
                         print("Edição encerrada.")
                         return
-                    else:
-                        print("Digite uma opção válida.")
