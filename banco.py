@@ -227,3 +227,21 @@ INSERT INTO historico (produto_id, tipo, descricao_produto, data_hora) VALUES (?
     finally:
         if conexao is not None:
             conexao.close()
+            
+def buscar_historico():
+    conexao = None
+    try:
+        with sqlite3.connect("estoque.db") as conexao:
+            cursor = conexao.cursor()
+            cursor.execute("SELECT * FROM historico ORDER BY id DESC") # Ordena os registros pelo ID, do maior para o menor.
+            info = cursor.fetchall()
+                
+        return info 
+    
+    except sqlite3.Error as erro:
+        print(f"Erro ao buscar histórico {erro}")
+        return False
+        
+    finally:
+        if conexao is not None:
+            conexao.close()

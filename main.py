@@ -16,6 +16,7 @@ def main():
         print("5- Retirar quantidade")
         print("6- Excluir produto")
         print("7- Editar produto")
+        print("8- Ver histórico")
         print("0- Sair")
 
         opcao = input("Digite uma opção: ").strip()
@@ -43,12 +44,16 @@ def main():
         elif opcao == "7":
             estoque.editar_item()
             
+        elif opcao == "8":
+            estoque.ver_historico()
+            
         elif opcao == "0":
             print("Programa encerrado.")
             break
+        
         else:
             print("Opção inválida. Tente novamente.")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # <= Inicia o programa apenas quando este arquivo é executado diretamente.
     main()

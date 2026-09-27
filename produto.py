@@ -1,4 +1,4 @@
-from banco import cadastrar_produto, buscar_todos_produtos, buscar_produto_id, adicionar_quantidade, remover_quantidade, excluir_produto, editar_nome, editar_valor, registrar_historico
+from banco import cadastrar_produto, buscar_todos_produtos, buscar_produto_id, adicionar_quantidade, remover_quantidade, excluir_produto, editar_nome, editar_valor, registrar_historico, buscar_historico
 
 def perguntar_continuar(mensagem):
     while True:
@@ -81,12 +81,13 @@ class Estoque:
         
         for numero, produto in enumerate(produtos, start=1):
             produto = Produto.from_tupla(produto)
-            print(f"Produto {numero}:\n"
-                  f"ID: {produto.id}\n"
-                  f"NOME: {produto.nome}\n"
-                  f"PREÇO: R${produto.valor:.2f}\n"
-                  f"QUANTIDADE: {produto.quantidade}"
-                    )
+            print(
+                f"Produto {numero}:\n"
+                f"ID: {produto.id}\n"
+                f"NOME: {produto.nome}\n"
+                f"PREÇO: R${produto.valor:.2f}\n"
+                f"QUANTIDADE: {produto.quantidade}"
+                )
             print("------------------------")
 
     def buscar_produto(self):
@@ -254,7 +255,7 @@ class Estoque:
                         registrar_historico(
                         None, # <= Usa None porque o produto já foi excluído; o ID original fica na descrição.
                         "exclusao",
-                        f"Item {produtos.nome} retirado do estoque (ID original: {id_produto}) excluído.) "
+                        f"Item {produtos.nome} retirado do estoque (ID original: {id_produto}) excluído. "
 )
                         print("Produto removido com sucesso.")
                         break
@@ -348,8 +349,8 @@ class Estoque:
                             if sucesso2:
                                 registrar_historico(id_produto, 
                                                     "edicao",
-                                                    f"Valor do produto {produtos.nome} alterado"
-                                                    f"de R$ {produtos.valor:2f} para R$ {novo_valor:.2f}"
+                                                    f"Valor do produto {produtos.nome} alterado "
+                                                    f"de R$ {produtos.valor:.2f} para R$ {novo_valor:.2f}"
                                                     )
                                 print("Valor atualizado com sucesso.")
                                 break
@@ -405,3 +406,20 @@ class Estoque:
                     else:
                         print("Edição encerrada.")
                         return
+                    
+    def ver_historico(self):
+        evento = buscar_historico()
+        
+        if not evento:
+            print("Nenhum evento registrado ainda.")
+            return
+        
+        for numero, evento in enumerate(evento, start=1):
+            print(
+                f"Evento: {numero}\n"
+                f"Produto ID: {evento[1]}\n"
+                f"Tipo: {evento[2]}\n"
+                f"Descrição: {evento[3]}\n"
+                f"Data/Hora: {evento[4]}\n"
+            )
+            print("------------------------")
