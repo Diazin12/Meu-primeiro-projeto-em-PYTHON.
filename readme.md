@@ -15,6 +15,9 @@ organização do código em módulos.
 - Retirar quantidade, verificando o saldo disponível.
 - Editar o nome, o preço ou ambos.
 - Excluir um produto mediante confirmação.
+- Registrar histórico de cadastros, entradas, saídas, edições e exclusões,
+  com descrição, data e hora.
+- Consultar o histórico pelo terminal, exibindo os registros mais recentes primeiro.
 - Salvar os dados para consultas nas próximas execuções.
 
 ## Validações e tratamento de erros
@@ -34,6 +37,7 @@ organização do código em módulos.
 
 - Python 3.
 - SQLite, utilizando o módulo `sqlite3` da biblioteca padrão.
+- Módulo `datetime` da biblioteca padrão para registrar a data e a hora dos eventos.
 - Programação Orientada a Objetos, com as classes `Produto` e `Estoque`.
 - Consultas SQL parametrizadas.
 - Conexões com o banco abertas por operação, usando gerenciador de contexto
@@ -46,7 +50,7 @@ Não é necessário instalar bibliotecas externas ou configurar um servidor de b
 ```text
 main.py      # Menu principal e início da aplicação
 produto.py   # Classes Produto e Estoque, interação e validações
-banco.py     # Conexão com SQLite e operações de persistência
+banco.py     # Conexão com SQLite, persistência de produtos e histórico
 readme.md    # Documentação do projeto
 estoque.db   # Banco de dados local, criado automaticamente se não existir
 ```
@@ -56,7 +60,7 @@ A classe `Produto` representa os dados de um item. O método de classe
 A classe `Estoque` reúne as operações disponíveis no terminal.
 
 A função `perguntar_continuar(mensagem)`, em `produto.py`, centraliza a
-pergunta padrão de "1-SIM / 2-NÃO" usada em várias operações (cadastrar mais
+pergunta padrão de "1-SIM / 2-SAIR" usada em várias operações (cadastrar mais
 um item, remover mais um, excluir mais um, editar mais um, confirmar uma
 alteração), evitando repetir a mesma lógica de validação em cada método.
 
@@ -75,6 +79,20 @@ A tabela `produtos` contém os seguintes campos:
 | `valor` | `REAL` | Preço do produto |
 | `quantidade` | `INTEGER` | Quantidade disponível em estoque |
 
+A tabela `historico` armazena os eventos das operações:
+
+| Campo | Tipo no SQLite | Descrição |
+| --- | --- | --- |
+| `id` | `INTEGER` | Chave primária gerada automaticamente |
+| `produto_id` | `INTEGER` | Referência ao produto; pode ser `NULL` após a exclusão |
+| `tipo` | `TEXT` | Tipo do evento: `cadastro`, `entrada`, `saida`, `edicao` ou `exclusao` |
+| `descricao_produto` | `TEXT` | Descrição da operação realizada |
+| `data_hora` | `TEXT` | Data e hora local no formato `DD/MM/AAAA HH:MM:SS` |
+
+Ao excluir um produto, os registros anteriores do histórico são preservados e
+o vínculo `produto_id` passa a ser `NULL` (`ON DELETE SET NULL`). O evento de
+exclusão guarda o nome e o ID original do produto na descrição.
+
 ## Como executar
 
 1. Instale o Python 3.
@@ -87,7 +105,7 @@ python main.py
 
 No Windows, caso utilize o inicializador `py`, execute `py main.py`.
 
-O arquivo `estoque.db` e a tabela `produtos` são criados automaticamente caso
+O arquivo `estoque.db` e as tabelas `produtos` e `historico` são criados automaticamente caso
 não existam. O caminho do banco é relativo à pasta de onde o comando é executado;
 por isso, inicie o programa dentro da pasta do projeto.
 
@@ -103,11 +121,18 @@ Escolha uma opção no menu e siga as instruções do terminal:
 5- Retirar quantidade
 6- Excluir produto
 7- Editar produto
+8- Ver histórico
 0- Sair
 ```
 
 Use o ID para identificar o produto nas consultas e alterações. Para preços com
 casas decimais, use ponto, por exemplo: `12.50`.
+
+Na opção **8 - Ver histórico**, cada evento exibe o ID do produto, o tipo da
+operação, a descrição e a data/hora. As entradas e saídas registram a quantidade
+movimentada e o saldo resultante; as edições registram os valores anteriores e
+novos do nome e/ou preço. Quando não há registros, o programa informa que nenhum
+evento foi registrado ainda.
 
 ## Objetivo
 
