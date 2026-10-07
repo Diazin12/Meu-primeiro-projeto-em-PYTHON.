@@ -1,0 +1,295 @@
+/* Busca por ID: mantém a rota e os dados do projeto. */
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #14202d, #0e151e 55%, #0b1016);
+    color: #f4f6fa;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    justify-content: flex-start;
+}
+
+.opcoes {
+    flex-shrink: 0;
+    background: #06090d;
+    border-bottom: 1px solid #2c3746;
+}
+
+.menu {
+    min-height: 60px;
+    padding: 0 20px;
+    gap: 10px;
+}
+
+.menu .h1 {
+    font-size: 26px;
+}
+
+.menu .h1 i {
+    margin-right: 5px;
+}
+
+.menu .card {
+    padding: 8px 10px;
+    border: 1px solid #46505f;
+    border-radius: 4px;
+    background: #0c1118;
+    font-size: 14px;
+}
+
+.menu .card i {
+    margin-right: 2px;
+}
+
+.menu .card:hover {
+    background: #202c3b;
+}
+
+.busca-produto {
+    box-sizing: border-box;
+    width: min(560px, calc(100% - 32px));
+    margin: 48px auto 32px;
+}
+
+.busca-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 20px 24px;
+}
+
+.busca-cabecalho > div {
+    min-width: 0;
+}
+
+.busca-icone {
+    display: flex;
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #315795;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #294d8c, #153571);
+    color: #c0d8ff;
+    font-size: 24px;
+}
+
+.busca-cabecalho h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+    line-height: 1.3;
+}
+
+.busca-cabecalho p {
+    margin: 0;
+    color: #aebed5;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.busca-painel {
+    padding: 20px;
+    border: 1px solid #30425a;
+    border-radius: 11px;
+    background: linear-gradient(120deg, #141f2b, #101822);
+    box-shadow: 0 12px 30px #00000026;
+}
+
+.busca-painel form {
+    display: grid;
+    gap: 18px;
+}
+
+.busca-campo {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+}
+
+.campo-icone {
+    display: flex;
+    box-sizing: border-box;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #35465c;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #26374c, #1d2939);
+    color: #d8e5f8;
+    font-size: 20px;
+}
+
+.campo-controle label {
+    display: block;
+    margin-bottom: 6px;
+    color: #edf3fc;
+    font-size: 14px;
+}
+
+.campo-controle input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #354c68;
+    border-radius: 5px;
+    background: linear-gradient(110deg, #1a2839, #17212e);
+    color: #f4f7fc;
+    font: inherit;
+    font-size: 13px;
+    color-scheme: dark;
+}
+
+.campo-controle input::placeholder {
+    color: #94a7c1;
+    opacity: 1;
+}
+
+.campo-controle input:focus {
+    outline: 2px solid #568fff;
+    outline-offset: 2px;
+}
+
+.busca-painel button {
+    display: flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 10px 16px;
+    border: 1px solid #3a7cff;
+    border-radius: 6px;
+    background: linear-gradient(110deg, #307bff, #2361f3);
+    box-shadow: 0 5px 16px #155cf330;
+    color: white;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.busca-painel button:hover {
+    background: #377fff;
+}
+
+.busca-painel button:focus-visible, .menu a:focus-visible {
+    outline: 2px solid #abcaff;
+    outline-offset: 3px;
+}
+
+.resultado {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid #267d70;
+    border-radius: 8px;
+    background: linear-gradient(120deg, #0c3430, #102725);
+}
+
+.resultado > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.resultado-icone {
+    display: flex;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #15bba1, #087c71);
+    color: #dcfff4;
+    font-size: 18px;
+}
+
+.resultado h2 {
+    margin: 0 0 10px;
+    color: #72dec8;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.resultado dl {
+    margin: 0;
+    color: #d6ece7;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.resultado dl > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.resultado dt, .resultado dd {
+    margin: 0;
+}
+
+@media (max-width: 1100px) {
+    .menu {
+        padding: 12px 20px;
+    }
+
+    .menu .h1 {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 600px) {
+    .menu {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+
+    .menu .h1 {
+        font-size: 21px;
+        white-space: normal;
+    }
+
+    .menu .card {
+        font-size: 13px;
+    }
+
+    .busca-produto {
+        margin-top: 32px;
+    }
+
+    .busca-cabecalho {
+        margin-left: 0;
+        margin-right: 0;
+        gap: 12px;
+    }
+
+    .busca-cabecalho h1 {
+        font-size: 22px;
+    }
+
+    .busca-painel {
+        padding: 16px;
+    }
+
+    .busca-campo {
+        gap: 10px;
+    }
+
+    .resultado {
+        padding: 14px;
+        gap: 10px;
+    }
+
+}

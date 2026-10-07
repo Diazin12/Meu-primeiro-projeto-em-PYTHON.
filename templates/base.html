@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de estoque</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    {% block css %}{% endblock %}
+</head>
+<body>
+
+        <div class = 'container'>
+
+            <div class = "opcoes">
+
+                <nav class = 'menu'>
+
+                    <a class = "h1" href = "{{ url_for('teste') }}"><i class="fa-solid fa-business-time"></i> Controle de estoque do Dias </a>
+
+                    <a class = "card" href = "{{ url_for('cadastro') }}"><i class="fa-solid fa-box" aria-hidden="true"></i> Cadastrar </a> <br>
+                    <a class = "card" href = "{{ url_for('listar_produtos') }}"><i class="fa-solid fa-list"></i> Listar </a> <br>
+                    <a class = "card" href = "{{ url_for('buscar') }}"><i class="fa-solid fa-magnifying-glass"></i> Buscar </a> <br>
+                    <a class = "card" href = "{{ url_for('adicionar') }}"><i class="fa-solid fa-plus"></i> Adicionar </a> <br>
+                    <a class = "card" href = "{{ url_for('retirar') }}"><i class="fa-solid fa-xmark"></i> Retirar </a> <br>
+                    <a class = "card" href = "{{ url_for('excluir') }}"><i class="fa-solid fa-trash"></i> Excluir </a> <br>
+                    <a class = "card" href = "{{ url_for('editar') }}"><i class="fa-solid fa-pen-to-square"></i> Editar </a> <br>
+                    <a class = "card" href = "{{ url_for('historico') }}"><i class="fa-solid fa-book"></i> Histórico </a> <br>
+
+            </nav>
+
+            </div>
+
+            {% with mensagens = get_flashed_messages() %}
+                {% if mensagens %}
+                <section class="mensagens" aria-label="Mensagens do sistema" role="status">
+                    {% for mensagem in mensagens %}
+                    <p class="mensagem">
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        <span>{{ mensagem }}</span>
+                    </p>
+                    {% endfor %}
+                </section>
+                {% endif %}
+            {% endwith %}
+
+            {% block conteudo %}
+            {% endblock %}  
+
+        </div>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+/* Estilos do cadastro, preservando o formulário e seus campos. */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #14202d 0%, #0e151e 50%, #0b1016 100%);
+    color: #f4f6fa;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    justify-content: flex-start;
+}
+.opcoes {
+    flex-shrink: 0;
+    background: #06090d;
+    border-bottom: 1px solid #2c3746;
+}
+.menu { min-height: 60px; padding: 0 20px; gap: 10px; }
+.menu .h1 { font-size: 26px; }
+.menu .h1 i { margin-right: 5px; }
+.menu .card {
+    padding: 8px 10px;
+    border: 1px solid #46505f;
+    border-radius: 4px;
+    background: #0c1118;
+    font-size: 14px;
+}
+.menu .card i { margin-right: 2px; }
+.menu .card:hover { background: #202c3b; }
+
+.cadastro {
+    box-sizing: border-box;
+    width: min(470px, calc(100% - 32px));
+    margin: 56px auto 32px;
+    padding: 0;
+}
+.cadastro-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.cadastro-cabecalho > div { min-width: 0; }
+.cadastro-cabecalho h1 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    line-height: 1.4;
+}
+.cadastro-cabecalho p {
+    margin: 0;
+    color: #aebed5;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.cadastro-icone {
+    display: flex;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #315795;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #294d8c, #153571);
+    color: #adcaff;
+    font-family: "Font Awesome 6 Free";
+    font-size: 21px;
+    font-weight: 900;
+}
+form {
+    box-sizing: border-box;
+    display: grid;
+    gap: 22px;
+    padding: 20px;
+    border: 1px solid #30425a;
+    border-radius: 11px;
+    background: linear-gradient(120deg, #141f2b, #101822);
+    box-shadow: 0 12px 30px #00000026;
+}
+.campo {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+}
+.campo-controle label {
+    display: block;
+    margin-bottom: 6px;
+    color: #edf3fc;
+    font-size: 13px;
+}
+.campo-icone {
+    display: flex;
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #35465c;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #26374c, #1d2939);
+    color: #d8e5f8;
+    font-size: 18px;
+    font-weight: 900;
+}
+form input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #354c68;
+    border-radius: 5px;
+    background: linear-gradient(110deg, #1a2839, #17212e);
+    color: #f4f7fc;
+    font: inherit;
+    font-size: 13px;
+    color-scheme: dark;
+}
+form input::placeholder { color: #94a7c1; opacity: 1; }
+form input:focus {
+    outline: 2px solid #568fff;
+    outline-offset: 2px;
+    border-color: #568fff;
+}
+form button {
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid #3a7cff;
+    border-radius: 6px;
+    background: linear-gradient(110deg, #307bff, #2361f3);
+    box-shadow: 0 5px 16px #155cf330;
+    color: white;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+form button::before {
+    content: "\f466";
+    margin-right: 9px;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+form button:hover { background: #377fff; }
+form button:focus-visible,
+.menu a:focus-visible { outline: 2px solid #abcaff; outline-offset: 3px; }
+.container > hr { display: none; }
+
+@media (max-width: 1100px) {
+    .menu { padding: 12px 20px; }
+    .menu .h1 { width: 100%; }
+}
+@media (max-width: 600px) {
+    .cadastro { margin-top: 32px; }
+    .menu { padding: 12px 16px; gap: 8px; }
+    .menu .h1 { font-size: 21px; white-space: normal; }
+    .menu .card { font-size: 13px; }
+    .cadastro-cabecalho h1 { font-size: 22px; }
+    .cadastro-cabecalho { gap: 12px; }
+    form { padding: 16px; }
+    .campo { gap: 12px; }
+}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='buscar.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+    
+    <main class="busca-produto">
+        <header class="busca-cabecalho">
+            <span class="busca-icone" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <div>
+                <h1>Buscar produto</h1>
+                <p>Digite o ID do produto para ver as informações.</p>
+            </div>
+        </header>
+        <section class="busca-painel" aria-label="Pesquisa de produto">
+
+        <form method= "POST" action = "{{ url_for('buscar') }}" >
+
+            <div class="busca-campo">
+                <span class="campo-icone" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <div class="campo-controle">
+                    <label for="id-produto">ID do produto</label>
+                    <input id="id-produto" type="number" name="id_produto" placeholder="Digite o ID do produto" value="{{ request.form.get('id_produto', '') }}" required>
+                </div>
+            </div>
+            
+            <button type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Buscar produto</button>
+
+        </form>
+
+        {% if produto %}
+
+            <section class="resultado" aria-labelledby="resultado-titulo">
+                <span class="resultado-icone" aria-hidden="true"><i class="fa-solid fa-box-open"></i></span>
+                <div>
+                    <h2 id="resultado-titulo">Produto encontrado!</h2>
+                    <dl>
+                        <div><dt>ID:</dt><dd>{{ produto[0] }}</dd></div>
+                        <div><dt>Nome:</dt><dd>{{ produto[1] }}</dd></div>
+                        <div><dt>Valor:</dt><dd>R$ {{ '%.2f'|format(produto[2])|replace('.', ',') }}</dd></div>
+                        <div><dt>Quantidade:</dt><dd>{{ produto[3] }}</dd></div>
+                    </dl>
+                </div>
+            </section>
+
+        {% endif %}
+
+        </section>
+    </main>
+
+    {% endblock %}

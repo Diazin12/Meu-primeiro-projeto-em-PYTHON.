@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+
+<main class="inicio">
+
+    <section class="apresentacao">
+        <h1>Controle de Estoque</h1>
+        <p>Meu primeiro projeto em Python.</p>
+    </section>
+
+    <section class="acoes">
+
+        <a href="{{ url_for('cadastro') }}" class="card">
+            <h2>Cadastrar produto</h2>
+        </a>
+
+        <a href="{{ url_for('listar_produtos') }}" class="card">
+            <h2>Listar produtos</h2>
+        </a>
+
+        <a href="{{ url_for('buscar') }}" class="card">
+            <h2>Buscar produto</h2>
+        </a>
+
+        <a href="{{ url_for('adicionar') }}" class="card">
+            <h2>Adicionar quantidade</h2>
+        </a>
+
+        <a href="{{ url_for('retirar') }}" class="card">
+            <h2>Retirar quantidade</h2>
+        </a>
+
+        <a href="{{ url_for('historico') }}" class="card">
+            <h2>Ver histórico</h2>
+        </a>
+
+    </section>
+
+</main>
+{% endblock %}

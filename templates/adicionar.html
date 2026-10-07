@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='adicionar.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+    
+    <main class="adicionar">
+        <header class="adicionar-cabecalho">
+            <span class="adicionar-icone" aria-hidden="true">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            <div>
+                <h1>Adicionar quantidade</h1>
+                <p>Informe o ID do produto e a quantidade a adicionar.</p>
+            </div>
+        </header>
+
+        <form method="POST" action="{{ url_for('adicionar') }}">
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true">
+                    <i class="fa-solid fa-box"></i>
+                </span>
+                <div class="campo-controle">
+                    <label for="id-produto">ID do produto</label>
+                    <input id="id-produto" type="number" name="id_produto" placeholder="Digite o ID do produto" step="1" required>
+                </div>
+            </div>
+
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true">
+                    <i class="fa-solid fa-cubes-stacked"></i>
+                </span>
+                <div class="campo-controle">
+                    <label for="quantidade">Quantidade a adicionar</label>
+                    <input id="quantidade" type="number" name="quantidade" placeholder="Digite a quantidade" min="1" step="1" required>
+                </div>
+            </div>
+
+            <button type="submit">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                Adicionar quantidade
+            </button>
+
+            <a class="voltar" href="{{ url_for('teste') }}">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                Voltar
+            </a>
+        </form>
+    </main>
+
+    {% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='editar.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+
+    <main class="editar">
+        <header class="editar-cabecalho">
+            <span class="editar-icone" aria-hidden="true">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </span>
+            <div>
+                <h1>Editar produto</h1>
+                <p>Escolha o que deseja editar.</p>
+            </div>
+        </header>
+
+        <form method="POST" action="{{ url_for('editar') }}">
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true">
+                    <i class="fa-solid fa-box"></i>
+                </span>
+                <div class="campo-controle">
+                    <label for="id-produto">ID do produto</label>
+                    <input id="id-produto" type="number" name="id_produto" placeholder="Digite o ID do produto" value="{{ request.args.get('id_produto', '') }}" step="1" required>
+                </div>
+            </div>
+
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true">
+                    <i class="fa-solid fa-pen"></i>
+                </span>
+                <div class="campo-controle">
+                    <label for="opcao">O que deseja editar?</label>
+                    <select id="opcao" name="opcao">
+                        <option value="1">Nome</option>
+                        <option value="2">Valor</option>
+                        <option value="3">Nome e valor</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="campo" id="campo-nome">
+                <span class="campo-icone" aria-hidden="true">
+                    <i class="fa-solid fa-tag"></i>
+                </span>
+                <div class="campo-controle">
+                    <label for="nome">Novo nome</label>
+                    <input id="nome" type="text" name="nome" placeholder="Digite o novo nome">
+                </div>
+            </div>
+
+            <div class="campo" id="campo-valor">
+                <span class="campo-icone" aria-hidden="true">R$</span>
+                <div class="campo-controle">
+                    <label for="valor">Novo valor (R$)</label>
+                    <input id="valor" type="number" name="valor" placeholder="Digite o novo valor" min="0" step="0.01">
+                </div>
+            </div>
+
+            <button type="submit">
+                <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                Atualizar produto
+            </button>
+
+            <a class="voltar" href="{{ url_for('listar_produtos') }}">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                Voltar
+            </a>
+        </form>
+    </main>
+
+
+    {% endblock %}

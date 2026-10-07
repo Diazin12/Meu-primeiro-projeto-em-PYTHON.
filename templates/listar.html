@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='listar.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+
+    <main class="listagem">
+        <header class="listagem-cabecalho">
+            <span class="listagem-icone" aria-hidden="true"><i class="fa-solid fa-list"></i></span>
+            <div>
+                <h1>Produtos cadastrados</h1>
+                <p>Veja todos os produtos do estoque.</p>
+            </div>
+            <label class="busca">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" id="busca-nome" placeholder="Buscar por nome..." aria-label="Buscar produto por nome">
+            </label>
+        </header>
+        <div class="tabela-container">
+            <table>
+                <caption class="sr-only">Produtos cadastrados no estoque</caption>
+                <thead>
+                    <tr><th scope="col">ID</th><th scope="col">Nome</th><th scope="col">Valor (R$)</th><th scope="col">Quantidade</th><th scope="col" class="coluna-acoes">Ações</th></tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                    <tr data-produto>
+                        <td>{{ produto[0] }}</td>
+                        <td data-nome>{{ produto[1] }}</td>
+                        <td>{{ '%.2f'|format(produto[2])|replace('.', ',') }}</td>
+                        <td>{{ produto[3] }}</td>
+                        <td class="coluna-acoes">
+                            <div class="acoes-produto">
+                                <a class="botao-acao editar" href="{{ url_for('editar', id_produto=produto[0]) }}" aria-label="Editar {{ produto[1] }}" title="Editar produto"><i class="fa-solid fa-pen" aria-hidden="true"></i></a>
+                                <a class="botao-acao excluir" href="{{ url_for('excluir', id_produto=produto[0]) }}" aria-label="Excluir {{ produto[1] }}" title="Abrir exclusão do produto"><i class="fa-solid fa-trash" aria-hidden="true"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr id="lista-vazia" {% if produtos %}hidden{% endif %}><td colspan="5">Nenhum produto encontrado.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="listagem-total" aria-live="polite">Total de produtos: <strong id="total-produtos">{{ produtos|length }}</strong></footer>
+    </main>
+    <script>
+        const buscaNome = document.getElementById('busca-nome');
+        const linhasProdutos = Array.from(document.querySelectorAll('[data-produto]'));
+        const normalizar = (texto) => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
+        buscaNome.addEventListener('input', () => {
+            const termo = normalizar(buscaNome.value.trim());
+            let total = 0;
+            linhasProdutos.forEach((linha) => {
+                const corresponde = normalizar(linha.querySelector('[data-nome]').textContent).includes(termo);
+                linha.hidden = !corresponde;
+                if (corresponde) total++;
+            });
+            document.getElementById('total-produtos').textContent = total;
+            document.getElementById('lista-vazia').hidden = total > 0;
+        });
+    </script>
+
+    {% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='retirar.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+
+    <main class="retirar">
+        <header class="retirar-cabecalho">
+            <span class="retirar-icone" aria-hidden="true">
+                <i class="fa-solid fa-minus"></i>
+            </span>
+            <div>
+                <h1>Retirar quantidade</h1>
+                <p>Informe o ID do produto e a quantidade a retirar.</p>
+            </div>
+        </header>
+
+        <form method="POST" action="{{ url_for('retirar') }}">
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true">
+                    <i class="fa-solid fa-box"></i>
+                </span>
+                <div class="campo-controle">
+                    <label for="id-produto">ID do produto</label>
+                    <input id="id-produto" type="number" name="id_produto" placeholder="Digite o ID do produto" step="1" required>
+                </div>
+            </div>
+
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true">
+                    <i class="fa-solid fa-cubes-stacked"></i>
+                </span>
+                <div class="campo-controle">
+                    <label for="quantidade">Quantidade a retirar</label>
+                    <input id="quantidade" type="number" name="quantidade" placeholder="Digite a quantidade" min="1" step="1" required>
+                </div>
+            </div>
+
+            <button type="submit">
+                <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                Retirar quantidade
+            </button>
+
+            <a class="voltar" href="{{ url_for('teste') }}">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                Voltar
+            </a>
+        </form>
+    </main>
+
+    {% endblock %}

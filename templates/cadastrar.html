@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='cadastrar.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+
+    <main class="cadastro">
+        <header class="cadastro-cabecalho">
+            <span class="cadastro-icone" aria-hidden="true"><i class="fa-solid fa-box"></i></span>
+            <div>
+                <h1>Cadastrar produto</h1>
+                <p>Digite as informações do produto para efetuar o cadastro.</p>
+            </div>
+        </header>
+
+        <form method= "POST" action = "{{ url_for('cadastro') }}" >
+
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true"><i class="fa-solid fa-box"></i></span>
+                <div class="campo-controle">
+                    <label for="nome">Nome do produto</label>
+                    <input id="nome" type="text" name="nome" placeholder="Nome" required>
+                </div>
+            </div>
+            <div class="campo">
+                <span class="campo-icone campo-moeda" aria-hidden="true">R$</span>
+                <div class="campo-controle">
+                    <label for="valor">Valor (R$)</label>
+                    <input id="valor" type="number" name="valor" placeholder="Valor" step="0.01" min="0" required>
+                </div>
+            </div>
+            <div class="campo">
+                <span class="campo-icone" aria-hidden="true"><i class="fa-solid fa-cubes-stacked"></i></span>
+                <div class="campo-controle">
+                    <label for="quantidade">Quantidade</label>
+                    <input id="quantidade" type="number" name="quantidade" placeholder="Quantidade" required>
+                </div>
+            </div>
+            
+            <button type = "submit"> Confirmar Cadastro </button>
+
+        </form>
+
+    </main>
+
+    {% endblock %}

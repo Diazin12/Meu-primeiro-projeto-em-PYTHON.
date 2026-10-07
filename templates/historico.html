@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='historico.css') }}">
+{% endblock %}
+
+    {% block conteudo %}
+
+    <main class="historico">
+        <header class="historico-cabecalho">
+            <span class="historico-icone" aria-hidden="true">
+                <i class="fa-solid fa-list"></i>
+            </span>
+            <div>
+                <h1>Histórico de movimentações</h1>
+                <p>Veja todas as ações realizadas no sistema.</p>
+            </div>
+        </header>
+
+        {% set acoes = {
+            'cadastro': 'Cadastrado',
+            'entrada': 'Adicionado',
+            'saida': 'Retirado',
+            'edicao': 'Editado',
+            'exclusao': 'Excluído'
+        } %}
+
+        <div class="tabela-container">
+            <table>
+                <caption class="sr-only">Histórico de movimentações do estoque</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Data/Hora</th>
+                        <th scope="col">Ação</th>
+                        <th scope="col">ID do produto</th>
+                        <th scope="col">Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evento in historico or [] %}
+                    <tr>
+                        <td>{{ evento[0] }}</td>
+                        <td class="data-hora">{{ evento[4] }}</td>
+                        <td>
+                            <span class="etiqueta {{ evento[2] if evento[2] in acoes else 'outra' }}">
+                                {{ acoes.get(evento[2], evento[2]) }}
+                            </span>
+                        </td>
+                        <td>{{ evento[1] if evento[1] is not none else '—' }}</td>
+                        <td class="descricao">{{ evento[3] or '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="historico-vazio">Nenhuma movimentação registrada.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+{% endblock %}

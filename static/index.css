@@ -1,0 +1,212 @@
+/* Página inicial: mantém os templates e as rotas existentes. */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #14202d, #0e151e 55%, #0b1016);
+    color: #f5f5f7;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    width: 100%;
+}
+
+.opcoes {
+    background: #050505;
+    border-top: 3px solid #2b2e38;
+    border-bottom: 1px solid #282b32;
+}
+
+.menu {
+    min-height: 60px;
+    padding: 0 20px;
+    gap: 10px;
+}
+
+.menu .h1 {
+    font-size: 26px;
+}
+
+.menu .h1 i {
+    margin-right: 5px;
+}
+
+.menu .card {
+    padding: 8px 10px;
+    border-color: #45464d;
+    border-radius: 4px;
+    background: #0b0c0e;
+    font-size: 14px;
+    transition: background 160ms ease, border-color 160ms ease;
+}
+
+.menu .card i {
+    margin-right: 2px;
+}
+
+.menu .card:hover {
+    background: #202229;
+    border-color: #9298a6;
+}
+
+.inicio {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1360px;
+    padding: 43px 41px 12px;
+}
+
+.apresentacao {
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.apresentacao h1 {
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+}
+
+.apresentacao h1::after {
+    content: "do Dias";
+    display: block;
+}
+
+.apresentacao p {
+    margin: 20px 0 0;
+    color: #b6bdcc;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.apresentacao::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    margin: 19px auto 0;
+    background: #777e8c;
+}
+
+.acoes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.acoes .card {
+    --accent: #6195e5;
+    position: relative;
+    box-sizing: border-box;
+    min-height: 192px;
+    padding: 20px 26px 42px;
+    border: 1px solid #30343e;
+    border-top-color: var(--accent);
+    border-radius: 14px;
+    background: linear-gradient(115deg, #1b1d23, #13151a);
+    color: #f5f5f7;
+    text-decoration: none;
+    transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.acoes .card::before {
+    content: "\f466";
+    display: flex;
+    box-sizing: border-box;
+    width: 63px;
+    height: 63px;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: #202228;
+    color: var(--accent);
+    font-family: "Font Awesome 6 Free";
+    font-size: 26px;
+    font-weight: 900;
+}
+
+.acoes .card h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.4;
+    letter-spacing: -0.4px;
+}
+
+.acoes .card h2::after {
+    content: "Adicione um novo produto ao estoque.";
+    display: block;
+    margin-top: 5px;
+    padding-right: 12px;
+    color: #b6bdcc;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+.acoes .card::after {
+    content: "\203a";
+    position: absolute;
+    right: 21px;
+    bottom: 29px;
+    color: var(--accent);
+    font-size: 32px;
+    line-height: 1;
+}
+
+.acoes .card:nth-child(2) { --accent: #42b99c; }
+.acoes .card:nth-child(3) { --accent: #dfb345; }
+.acoes .card:nth-child(4) { --accent: #b17bda; }
+.acoes .card:nth-child(5) { --accent: #d96973; }
+.acoes .card:nth-child(6) { --accent: #94a5d5; }
+
+.acoes .card:nth-child(2)::before { content: "\f03a"; }
+.acoes .card:nth-child(3)::before { content: "\f002"; }
+.acoes .card:nth-child(4)::before { content: "\f067"; }
+.acoes .card:nth-child(5)::before { content: "\f068"; }
+.acoes .card:nth-child(6)::before { content: "\f022"; }
+
+.acoes .card:nth-child(2) h2::after { content: "Veja todos os produtos cadastrados."; }
+.acoes .card:nth-child(3) h2::after { content: "Encontre um produto pelo ID ou nome."; }
+.acoes .card:nth-child(4) h2::after { content: "Adicione quantidade a um produto."; }
+.acoes .card:nth-child(5) h2::after { content: "Retire quantidade de um produto."; }
+.acoes .card:nth-child(6) h2::after { content: "Veja todas as movimentações realizadas."; }
+
+.acoes .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+}
+
+.menu a:focus-visible,
+.acoes .card:focus-visible {
+    outline: 2px solid #f5f5f7;
+    outline-offset: 4px;
+}
+
+@media (max-width: 1100px) {
+    .menu { padding: 12px 20px; }
+    .menu .h1 { width: 100%; }
+    .inicio { padding: 36px 24px 24px; }
+    .acoes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+    .menu { gap: 8px; padding: 12px 16px; }
+    .menu .h1 { font-size: 21px; white-space: normal; }
+    .menu .card { font-size: 13px; }
+    .inicio { padding: 32px 16px 24px; }
+    .apresentacao h1 { font-size: 38px; }
+    .apresentacao p { font-size: 16px; }
+    .acoes { grid-template-columns: 1fr; gap: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu .card,
+    .acoes .card { transition: none; }
+    .acoes .card:hover { transform: none; }
+}
